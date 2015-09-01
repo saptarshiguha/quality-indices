@@ -354,7 +354,7 @@
         var legend = [];
         var suites = [];
         suites_data.forEach(function(suite, i) {
-            legend.push(suite.key);
+            legend.push((suite.key.length > 20) ? suite.key.substring(0,20) + '...' : suite.key);
             suites.push(suite.values);
         });
 
@@ -373,6 +373,24 @@
             x_accessor: 'date',
             y_accessor: 'ag',
             legend: legend
+        });
+        
+        //create individual charts, one for each suite
+        suites.forEach(function(suite, i) {
+            MG.data_graphic({
+                title: suite[0].suite,
+                data: suite,
+                width: 600,
+                height: 250,
+                area: false,
+                right: 100,
+                decimals: 4,
+                y_extended_ticks: true,
+                show_confidence_band: ['agLB', 'agUB'],
+                target: '#raw-charts-' + i,
+                x_accessor: 'date',
+                y_accessor: 'ag'
+            });
         });
     }
 
