@@ -314,7 +314,7 @@
             $('.dropdown-menu li:first-child').remove();
             $('.dropdown-menu li.divider').remove();
             $('.suiteBucket-btns .dropdown-toggle .title').html(global.suiteBucket);
-            $('.machinePlatform-btns .dropdown-toggle .title').html(global.machinePlatforms);
+            $('.machinePlatform-btns .dropdown-toggle .title').html(global.machinePlatform);
         })();
 
         //hide 'suites' charts on page load
