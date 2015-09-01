@@ -1,0 +1,141 @@
+html {
+    font-size: 12px;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif, Arial;
+}
+
+.revision-data {
+    background-color: #333333;
+    border-radius: 3px;
+    color: #c9c9c9;
+    font-size: 1rem;
+    height: 28px;
+    margin: 30px 0 0 0;
+    padding: 6px;
+}
+
+p {
+    font-family: 'PT Serif', serif;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.mg-chart-title {
+    font-size: 1.3rem;
+}
+
+.footer {
+    border-top: 1px solid #3b3b3b;
+    font-size: 0.9rem;
+    margin: 10px 0 0 0;
+    padding: 10px 0 0 0;
+}
+
+h1 {
+    font-size: 40px;
+    font-weight: 300;
+    margin: 45px 0 12px 0;
+    text-align: center;
+}
+
+.transparent-rollover-rect {
+    fill: white;
+}
+
+.mg-missing-background {
+    stroke: #ccc;
+}
+
+.divider {
+    height: 20px;
+}
+
+path.mg-confidence-band {
+    opacity: 0.15;
+}
+
+.mg-line-legend text {
+    font-size: 0.8rem;
+}
+
+.mg-line4-color {
+    stroke: #fc48f1;
+}
+
+.mg-area4-color {
+    fill: #fc48f1;
+}
+
+.mg-hover-line4-color {
+    stroke: #fc48f1;
+}
+
+.mg-line4-legend-color {
+    color: #fc48f1;
+    fill: #fc48f1;
+}
+
+ul {
+    clear: both;
+    font-size: 1.2rem;
+    padding: 10px 0 0 0;
+}
+
+ul li {
+    display: inline;
+    list-style: none;
+    padding-right: 15px;
+}
+
+ul li.no-padding {
+    padding: 0;
+}
+
+ul.examples li {
+    line-height: 30px;
+}
+
+.pill {
+    font-family: 'Open Sans', serif;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+.pill:hover {
+    text-decoration: none;
+}
+
+a,
+a:active,
+a:visited {
+    color: #70b6f1;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #70b6f1;
+}
+
+a.active {
+    background-color: #70b6f1;
+    border: 0;
+    border-radius: 24px;
+    color: #fff;
+    padding: 2px 8px 2px 8px;
+    text-decoration: none;
+}
+
+.charts {
+    opacity: 0;
+}
+
+.switch-bottom {
+    padding: 50px 0 0 0;
+}
+
+.switch-bottom li,
+.switch-bottom li a {
+    font-size: 0.9rem;
+}
