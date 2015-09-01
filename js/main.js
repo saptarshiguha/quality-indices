@@ -4,7 +4,8 @@
     var global = {};
     global.machinePlatform = 'osx-10-10';
     global.suiteBucket = 'javascript';
-            
+
+    //event listeners
     $('ul.switch li a.pill').on('click', function(event) {
         event.preventDefault();
         $('ul.switch li a.pill').removeClass('active');
@@ -20,13 +21,7 @@
         return false;
     });
 
-    var mouseover = function() {
-        return function(d, i) {
-            d3.select('.revision-data')
-                .html('Revision <a target="_blank" href="https://hg.mozilla.org/mozilla-central/rev/' + d.revision + '">' + d.revision + '</a> analyzed on ' + d.date);
-        };
-    }
-
+    //render charts
     d3.json('data/avgForSuiteBucket.json', function(dataSuiteBucket) {
     d3.json('data/avgForSuites.json', function(dataSuite) {
     d3.json('data/importanceCoef.json', function(dataImportanceCoef) {
@@ -329,6 +324,7 @@
     });
     });
 
+    //callback for buttons
     function redrawRawData() {
         //get suites for chosen button's options
         var suites_data = global.rawData.filter(function(platform) {
@@ -374,7 +370,7 @@
             y_accessor: 'ag',
             legend: legend
         });
-        
+
         //create individual charts, one for each suite
         suites.forEach(function(suite, i) {
             MG.data_graphic({
@@ -391,13 +387,14 @@
                 y_accessor: 'ag'
             });
         });
-        
+
         //empty containers that don't have suites
         for(var i = suites.length; i < $('.raw-suite').length; i += 1) {
             d3.select('#raw-charts-' + i).selectAll("*").remove();
         }
     }
 
+    //nest data by keys
     function nestBy(data_transformed, key, key2, key3) {
         //nest the data on suitebucket, then optionally on suite
         if(key3) {
@@ -429,7 +426,8 @@
                 .entries(data_transformed);
         }
     }
-    
+
+    //transform object to array
     function objToArray(data) {
         var data_transformed = [];
     
