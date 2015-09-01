@@ -383,7 +383,6 @@
                 width: 600,
                 height: 250,
                 area: false,
-                right: 100,
                 decimals: 4,
                 y_extended_ticks: true,
                 show_confidence_band: ['agLB', 'agUB'],
