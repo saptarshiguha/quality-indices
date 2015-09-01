@@ -392,6 +392,11 @@
                 y_accessor: 'ag'
             });
         });
+        
+        //empty containers that don't have suites
+        for(var i = suites.length; i < $('.raw-suite').length; i += 1) {
+            d3.select('#raw-charts-' + i).selectAll("*").remove();
+        }
     }
 
     function nestBy(data_transformed, key, key2, key3) {
