@@ -1,6 +1,10 @@
 (function() {
     'use strict'
 
+    var global = {};
+    global.machinePlatform = 'osx-10-10';
+    global.suiteBucket = 'javascript';
+            
     $('ul.switch li a.pill').on('click', function(event) {
         event.preventDefault();
         $('ul.switch li a.pill').removeClass('active');
@@ -27,8 +31,8 @@
     d3.json('data/avgForSuites.json', function(dataSuite) {
     d3.json('data/importanceCoef.json', function(dataImportanceCoef) {
     d3.json('data/avgForSuiteAndHW.json', function(dataHw) {
-        var dataSuiteBucketNested = nestBy(dataSuiteBucket, 'suiteBucket');
-        var dataSuiteNested = nestBy(dataSuite, 'suiteBucket', 'suite');
+        var dataSuiteBucketNested = nestBy(objToArray(dataSuiteBucket), 'suiteBucket');
+        var dataSuiteNested = nestBy(objToArray(dataSuite), 'suiteBucket', 'suite');
 
         //draw each of the charts for suite buckets
         dataSuiteBucketNested.forEach(function(chart, i) {
@@ -267,45 +271,53 @@
 
         //draw each of the charts for our raw data
         (function() {
-            var dataHwNested = nestBy(dataHw, 'suiteBucket', 'suite', 'machine_platform');
-            dataHwNested.forEach(function(chart, i) {
-                //build legend
-                var legend = [];
-                var platforms = [];
-                chart.values.forEach(function(platform, i) {
-                    //each platform.values element is a series for a machine-suite combo
-                    //create a new array, push to it those series as naked arrays
-                    platform.values.forEach(function(platform_machine, i) {
-                        //console.log(platform);
-                        legend.push(platform.key + '-' + platform_machine.key);
-                        platforms.push(platform_machine.values);
-                    });
-                });
-                
-                console.log(chart.key, legend, platforms);
-            
-                MG.data_graphic({
-                    title: chart.key,
-                    data: platforms,
-                    width: 600,
-                    height: 250,
-                    area: false,
-                    right: 100,
-                    inflator: 1.6,
-                    decimals: 4,
-                    y_extended_ticks: true,
-                    //show_confidence_band: ['idxUnscaledLB', 'idxUnscaledUB'],
-                    target: '#raw-' + chart.key,
-                    x_accessor: 'date',
-                    y_accessor: 'ag',
-                    interpolate: 'basic',
-                    legend: legend
-                });
+            var dataHwNested = nestBy(objToArray(dataHw), 'machine_platform', 'suiteBucket', 'suite');
+            global.rawData = dataHwNested;
+
+            //get suites for chosen button's options
+            var buttons_data = [];
+            var suites_data = global.rawData.filter(function(platform) {
+                buttons_data.push({machinePlatform: platform.key});
+                return platform.key === global.machinePlatform;
             });
+            suites_data = suites_data[0].values.filter(function(bucket) {
+                buttons_data.push({suiteBucket: bucket.key});
+                return bucket.key === global.suiteBucket;
+            });
+            suites_data = suites_data[0].values;
+
+            redrawRawData();
+
+            //build buttons
+            //var resolution_features = ['weekly', 'monthly'];
+            var buttons = MG.button_layout('.buttons')
+                .data(buttons_data)
+                //.manual_button('Time Scale', resolution_features, function(){ console.log('switched time scales'); })
+                .button('machinePlatform', 'Machine', sort)
+                .button('suiteBucket', 'Suite bucket', sort)
+                .callback(function(button, option) {
+                    global[button] = option;
+                    redrawRawData();
+
+                    return false;
+                })
+                .display();
+                
+            function sort(a,b) {
+                if(a > b) return 1;
+                if(b > a) return -1;
+
+                return 0;
+            }
+            
+            //remove 'All' option from buttons
+            $('.dropdown-menu li:first-child').remove();
+            $('.dropdown-menu li.divider').remove();
+            $('.suiteBucket-btns .dropdown-toggle .title').html(global.suiteBucket);
+            $('.machinePlatform-btns .dropdown-toggle .title').html(global.machinePlatforms);
         })();
 
         //hide 'suites' charts on page load
-        
         //set the active pill and section on first load
         var section = (document.location.hash) ? document.location.hash.slice(1) : 'suite-buckets';
         $('.charts').addClass('hidden');
@@ -316,10 +328,54 @@
     });
     });
     });
-    
-    function nestBy(data, key, key2, key3) {
-        var data_transformed = objToArray(data);
 
+    function redrawRawData() {
+        //get suites for chosen button's options
+        var suites_data = global.rawData.filter(function(platform) {
+            return platform.key === global.machinePlatform;
+        });
+        suites_data = suites_data[0].values.filter(function(bucket) {
+            return bucket.key === global.suiteBucket;
+        });
+        
+        if(suites_data.length == 0) {
+            MG.data_graphic({
+                width: 800,
+                height: 250,
+                target: '#raw-charts',
+                chart_type: 'missing-data'
+            });
+            return false;
+        }
+
+        suites_data = suites_data[0].values;
+
+        //build legend
+        var legend = [];
+        var suites = [];
+        suites_data.forEach(function(suite, i) {
+            legend.push(suite.key);
+            suites.push(suite.values);
+        });
+
+        MG.data_graphic({
+            data: suites,
+            width: 800,
+            height: 250,
+            area: false,
+            right: 100,
+            inflator: 1.6,
+            decimals: 4,
+            y_extended_ticks: true,
+            show_confidence_band: ['agLB', 'agUB'],
+            target: '#raw-charts',
+            x_accessor: 'date',
+            y_accessor: 'ag',
+            legend: legend
+        });
+    }
+
+    function nestBy(data_transformed, key, key2, key3) {
         //nest the data on suitebucket, then optionally on suite
         if(key3) {
             return d3.nest()

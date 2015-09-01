@@ -77,24 +77,20 @@ path.mg-confidence-band {
     fill: #fc48f1;
 }
 
-ul {
+ul.switch {
     clear: both;
     font-size: 1.2rem;
     padding: 10px 0 0 0;
 }
 
-ul li {
+ul.switch li {
     display: inline;
     list-style: none;
     padding-right: 15px;
 }
 
-ul li.no-padding {
+ul.switch li.no-padding {
     padding: 0;
-}
-
-ul.examples li {
-    line-height: 30px;
 }
 
 .pill {
@@ -131,11 +127,28 @@ a.active {
     opacity: 0;
 }
 
-.switch-bottom {
+ul.switch-bottom {
     padding: 50px 0 0 0;
 }
 
-.switch-bottom li,
-.switch-bottom li a {
+ul.switch-bottom li,
+ul.switch-bottom li a {
     font-size: 0.9rem;
+}
+
+.btn-group {
+    display: inline-block;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding-bottom: 15px;
+}
+
+.btn-group span.which-button {
+    font-weight: 300;
+    color: darkgray;
+}
+
+.btn-group span.title {
+    margin-left: 4px;
+    margin-right: 4px;
 }
